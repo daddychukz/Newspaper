@@ -328,11 +328,6 @@ workflows:
       - pmd_lint
       - checkstyle_lint
       - build_debug
-          requires:
-            - android_lint
-            - findbugs_lint
-            - pmd_lint
-            - checkstyle_lint
       - test_instrumented:
           requires:
             - build_debug
