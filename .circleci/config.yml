@@ -92,8 +92,8 @@ references:
         pwd
         touch mobile/src/debug/google-services.json
         touch mobile/src/release/google-services.json
-        echo $GCLOUD_SERVICE_KEY | base64 --decode >> mobile/src/debug/google-services.json
-        echo $GCLOUD_SERVICE_KEY | base64 --decode >> mobile/src/release/google-services.json
+        echo $GOOGLE_SERVICES_KEY | base64 --decode >> mobile/src/debug/google-services.json
+        echo $GOOGLE_SERVICES_KEY | base64 --decode >> mobile/src/release/google-services.json
 
   # Google Cloud Service
 
