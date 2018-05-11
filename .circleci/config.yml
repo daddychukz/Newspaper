@@ -90,9 +90,9 @@ references:
       name: Decode Google Services key
       command: |
         pwd
-        touch mobile/google-services.json
-        echo $GOOGLE_SERVICES_KEY | base64 --decode >> mobile/google-services.json
-        cat mobile/google-services.json
+        touch mobile/src/debug/google-services.json
+        echo $GOOGLE_SERVICES_KEY | base64 --decode >> mobile/src/debug/google-services.json
+        cat mobile/src/debug/google-services.json
 
   # Google Cloud Service
 
