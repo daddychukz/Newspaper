@@ -221,10 +221,10 @@ jobs:
       - *decode_gcloud_key
       - run:
           name: Set Google Cloud target project
-          command: gcloud config set project newspaper-84169
+          command: gcloud config set project andela-learning
       - run:
           name: Authenticate with Google Cloud
-          command: gcloud auth activate-service-account firebase-adminsdk-p9qvk@newspaper-84169.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
+          command: gcloud auth activate-service-account mrm-android-test@andela-learning.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
       - run:
           name: Run instrumented test on Firebase Test Lab
           command: gcloud firebase test android run --type instrumentation --app mobile/build/outputs/apk/debug/mobile-debug.apk --test mobile/build/outputs/apk/androidTest/debug/mobile-debug-androidTest.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --environment-variables coverage=true,coverageFile=/sdcard/tmp/code-coverage/connected/coverage.ec --directories-to-pull=/sdcard/tmp --timeout 20m
@@ -291,7 +291,7 @@ workflows:
   workflow:
     jobs:
       - build_debug
-      - build_release
+      # - build_release
       - check_quality:
           requires:
             - build_debug
@@ -305,13 +305,13 @@ workflows:
           requires:
             - test_unit
             - test_instrumented
-      - deploy:
-          filters:
-            branches:
-              only:
-                - master
-          requires:
-            - build_release
-            - check_quality
-            - test_unit
-            - test_instrumented
+      # - deploy:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      #     requires:
+      #       - build_release
+      #       - check_quality
+      #       - test_unit
+      #       - test_instrumented
