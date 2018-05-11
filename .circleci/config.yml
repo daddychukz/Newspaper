@@ -313,23 +313,18 @@ jobs:
           command: |
             bash ~/repo/.circleci/notify_slack_fail.sh
 
-  workflows:
-    version: 2
-    lint_test_and_deployment:
-      jobs:
-        - android_lint
-        - findbugs_lint
-        - pmd_lint
-        - checkstyle_lint
-        - build_debug
-            requires:
-              - android_lint
-              - findbugs_lint
-              - pmd_lint
-              - checkstyle_lint
-        - test_instrumented:
-            requires:
-              - build_debug
+workflows:
+  version: 2
+  lint_test_and_deployment:
+    jobs:
+      - android_lint
+      - findbugs_lint
+      - pmd_lint
+      - checkstyle_lint
+      - build_debug
+      - test_instrumented:
+          requires:
+            - build_debug
 
 
 # version: 2
