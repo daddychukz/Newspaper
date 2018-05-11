@@ -199,84 +199,83 @@ jobs:
   checkstyle_lint:
     <<: *defaults
     steps:
-    - checkout
-    - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "build.gradle" }}
-        # fallback to using the latest cache if no exact match is found
-        - v1-dependencies-
-    - run: ./gradlew androidDependencies
-    - save_cache:
-        paths:
-            - ~/.gradle
-        key: v1-dependencies-{{ checksum "build.gradle" }}
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+              - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      # Running static analysis tools
-    - run:
-        name: Running quality checks
-        command: |
-          echo "Run checkstyle"
-          cd ~/repo
-          ./gradlew checkstyle
+        # Running static analysis tools
+      - run:
+          name: Running quality checks
+          command: |
+            echo "Run checkstyle"
+            cd ~/repo
+            ./gradlew checkstyle
 
-      # Storing reports
-    - store_artifacts:
-        path: ~/repo/app/build/reports
+        # Storing reports
+      - store_artifacts:
+          path: ~/repo/app/build/reports
 
-      # Sending notification
-    - run:
-        name: Notifying slack channel (succeeded)
-        when: on_success
-        command: |
-          bash ~/repo/.circleci/notify_slack.sh
-    - run:
-        name: Notifying slack channel (failed)
-        when: on_fail
-        command: |
-          bash ~/repo/.circleci/notify_slack_fail.sh
+        # Sending notification
+      - run:
+          name: Notifying slack channel (succeeded)
+          when: on_success
+          command: |
+            bash ~/repo/.circleci/notify_slack.sh
+      - run:
+          name: Notifying slack channel (failed)
+          when: on_fail
+          command: |
+            bash ~/repo/.circleci/notify_slack_fail.sh
 
   ## Build debug APK and instrumented test APK
   build_debug:
     <<: *defaults
     steps:
-        - checkout
-        - restore_cache:
-            keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-        - run: ./gradlew androidDependencies
-        - save_cache:
-            paths:
-                - ~/.gradle
-            key: v1-dependencies-{{ checksum "build.gradle" }}
-        - *export_gservices_key
-        - *decode_gservices_key
-        - run:
-            name: Gradle build (debug)
-            command: ./gradlew -PciBuild=true :mobile:assembleDebug :mobile:assembleAndroidTest
-        - *persist_debug_workspace
-        - store_artifacts:
-            path: mobile/build/outputs/apk/
-            destination: /apk/
-        - store_artifacts:
-            path: ~/repo/app/build/reports
-            destination: reports
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+              - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - *export_gservices_key
+      - *decode_gservices_key
+      - run:
+          name: Gradle build (debug)
+          command: ./gradlew -PciBuild=true :mobile:assembleDebug :mobile:assembleAndroidTest
+      - *persist_debug_workspace
+      - store_artifacts:
+          path: mobile/build/outputs/apk/
+          destination: /apk/
+      - store_artifacts:
+          path: ~/repo/app/build/reports
+          destination: reports
 
-      # Sending notification
-        - run:
-            name: Notifying slack channel on succeed
-            when: on_success
-            command: |
-              bash ~/repo/.circleci/notify_slack.sh
-        - run:
-            name: Notifying slack channel on fail
-            when: on_fail
-            command: |
-              bash ~/repo/.circleci/notify_slack_fail.sh
+    # Sending notification
+      - run:
+          name: Notifying slack channel on succeed
+          when: on_success
+          command: |
+            bash ~/repo/.circleci/notify_slack.sh
+      - run:
+          name: Notifying slack channel on fail
+          when: on_fail
+          command: |
+            bash ~/repo/.circleci/notify_slack_fail.sh
 
 	## Run instrumentation tests
-
   test_instrumented:
     <<: *gcloud_config
     steps:
