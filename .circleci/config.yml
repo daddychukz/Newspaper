@@ -275,7 +275,7 @@ jobs:
           command: |
             bash ~/repo/.circleci/notify_slack_fail.sh
 
-	## Run instrumentation tests
+    ## Run instrumentation tests
   test_instrumented:
     <<: *gcloud_config
     steps:
