@@ -89,6 +89,7 @@ references:
     run:
       name: Decode Google Services key
       command: |
+        touch ${HOME}/mobile/src/google-services.json
         echo $GOOGLE_SERVICES_KEY | base64 -di > ${HOME}/mobile/src/google-services.json
         pwd
         cat ${HOME}/mobile/src/google-services.json
