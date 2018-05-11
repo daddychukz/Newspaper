@@ -19,6 +19,12 @@ attach_debug_workspace: &attach_debug_workspace
   attach_workspace:
     at: ~/repo
 
+persist_firebase_workspace: &persist_firebase_workspace
+  persist_to_workspace:
+    root: ~/repo
+    paths:
+      - firebase
+
 # Google Services From Firebase (JSON)
 
 export_gservices_key: &export_gservices_key
@@ -322,6 +328,11 @@ workflows:
       - pmd_lint
       - checkstyle_lint
       - build_debug
+          requires:
+            - android_lint
+            - findbugs_lint
+            - pmd_lint
+            - checkstyle_lint
       - test_instrumented:
           requires:
             - build_debug
