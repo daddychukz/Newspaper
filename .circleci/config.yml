@@ -22,40 +22,41 @@ attach_debug_workspace: &attach_debug_workspace
 # Google Services From Firebase (JSON)
 
 export_gservices_key: &export_gservices_key
- run:
-  name: Export Google Services key environment variable
-  command: echo 'export GOOGLE_SERVICES_KEY="$GOOGLE_SERVICES_KEY"' >> $BASH_ENV
-  decode_gservices_key: &decode_gservices_key
- run:
-  name: Decode Google Services key
-  command: |
-   pwd
-   touch app/google-services.json
-   echo $GOOGLE_SERVICES_KEY | base64 --decode >> app/google-services.json
+  run:
+    name: Export Google Services key environment variable
+    command: echo 'export GOOGLE_SERVICES_KEY="$GOOGLE_SERVICES_KEY"' >> $BASH_ENV
+
+decode_gservices_key: &decode_gservices_key
+  run:
+    name: Decode Google Services key
+    command: |
+      pwd
+      touch app/google-services.json
+      echo $GOOGLE_SERVICES_KEY | base64 --decode >> app/google-services.json
 
 # Google Cloud Service Account Key
 
 export_gcloud_key: &export_gcloud_key
- run:
-  name: Export Google Cloud Service key environment variable
-  command: echo 'export GCLOUD_SERVICE_KEY="$GCLOUD_SERVICE_KEY"' >> $BASH_ENV
+  run:
+    name: Export Google Cloud Service key environment variable
+    command: echo 'export GCLOUD_SERVICE_KEY="$GCLOUD_SERVICE_KEY"' >> $BASH_ENV
   
 decode_gcloud_key: &decode_gcloud_key
- run:
-  name: Decode Google Cloud credentials
-  command: |
-   touch client-secret.json
-   echo $GCLOUD_SERVICE_KEY | base64 --decode >> client-secret.json
+  run:
+    name: Decode Google Cloud credentials
+    command: |
+      touch client-secret.json
+      echo $GCLOUD_SERVICE_KEY | base64 --decode >> client-secret.json
 
 persist_debug_workspace: &persist_debug_workspace
- persist_to_workspace:
-  root: ~/repo
-   paths:
-    - app/build/intermediates
-    - app/build/outputs/androidTest-results
-    - app/build/outputs/apk
-    - app/build/outputs/code-coverage
-    - app/build/test-results
+  persist_to_workspace:
+    root: ~/repo
+    paths:
+      - app/build/intermediates
+      - app/build/outputs/androidTest-results
+      - app/build/outputs/apk
+      - app/build/outputs/code-coverage
+      - app/build/test-results
 
 version: 2
 jobs:
