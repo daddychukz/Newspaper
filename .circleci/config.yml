@@ -91,7 +91,7 @@ references:
       command: |
         pwd
         touch mobile/google-services.json
-        echo $GOOGLE_SERVICES_KEY | base64 -di > mobile/google-services.json
+        echo $GOOGLE_SERVICES_KEY | base64 --decode >> mobile/google-services.json
         cat mobile/google-services.json
 
   # Google Cloud Service
@@ -103,7 +103,7 @@ references:
   decode_gcloud_key: &decode_gcloud_key
     run:
       name: Decode Google Cloud credentials
-      command: echo $GCLOUD_SERVICE_KEY | base64 -di > ${HOME}/client-secret.json
+      command: echo $GCLOUD_SERVICE_KEY | base64 --decode >> ${HOME}/client-secret.json
 
   # Fabric
 
