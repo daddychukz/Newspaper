@@ -91,8 +91,9 @@ references:
       command: |
         pwd
         touch mobile/src/debug/google-services.json
+        touch mobile/src/release/google-services.json
         echo $GOOGLE_SERVICES_KEY | base64 --decode >> mobile/src/debug/google-services.json
-        cat mobile/src/debug/google-services.json
+        echo $GOOGLE_SERVICES_KEY | base64 --decode >> mobile/src/release/google-services.json
 
   # Google Cloud Service
 
@@ -103,7 +104,9 @@ references:
   decode_gcloud_key: &decode_gcloud_key
     run:
       name: Decode Google Cloud credentials
-      command: echo $GCLOUD_SERVICE_KEY | base64 --decode >> ${HOME}/client-secret.json
+      command: |
+        touch client-secret.json
+        echo $GCLOUD_SERVICE_KEY | base64 --decode >> client-secret.json
 
   # Fabric
 
@@ -228,7 +231,7 @@ jobs:
           command: gcloud config set project andela-learning
       - run:
           name: Authenticate with Google Cloud
-          command: gcloud auth activate-service-account mrm-android-test@andela-learning.iam.gserviceaccount.com --key-file ${HOME}/client-secret.json
+          command: gcloud auth activate-service-account mrm-android-test@andela-learning.iam.gserviceaccount.com --key-file client-secret.json
       - run:
           name: Run instrumented test on Firebase Test Lab
           command: gcloud firebase test android run --type instrumentation --app mobile/build/outputs/apk/debug/mobile-debug.apk --test mobile/build/outputs/apk/androidTest/debug/mobile-debug-androidTest.apk --device model=sailfish,version=26,locale=en_US,orientation=portrait --environment-variables coverage=true,coverageFile=/sdcard/tmp/code-coverage/connected/coverage.ec --directories-to-pull=/sdcard/tmp --timeout 20m
